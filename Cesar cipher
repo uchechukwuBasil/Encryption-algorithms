@@ -1,0 +1,123 @@
+/*
+# Cesar-encryption
+This code have a class  SecretMsg, with plain_text, shift_key and decrypt_Msg as private that is known to party involve.
+
+ This code shows how caesar cryptography woks, it takes a string plain_text  with the sender shift key 
+and encrypt it by shifting each char in the string with the sender shift key. 
+
+of course the receiver will have to enter the shift key which is know  to both party to decrypt msg 
+
+incase the SecretMsg enters the wrong hand then it would not be decrypted.
+
+// SAMPLE INPUT 
+//PLAIN TEXT : ATTACK AT DAWN 
+// shift_key : 3
+// OUTPUT :  DWWDFN DW GDZQ
+// ENTER : decrypt_key : 3
+// OUTPUT : ATTACK AT DAWN 
+
+
+*/
+
+
+
+#include <iostream>
+#include<string>
+using namespace std;
+class SecretMsg{
+
+private:
+
+string plain_text; // your texts are private
+string decrypt_Msg; // the decrypt_Msg is private too
+int shift_key; // key is also private
+
+public:
+
+string cipher_text; //the cipher_text is public 
+ string  func ( string m, int key)
+ {
+     plain_text=m; shift_key=key; 
+    
+     
+     int l=plain_text.length();
+     for (int i=0; i<l;i++)
+     { 
+     //for space
+     if(plain_text [i]==' ')
+     {
+         cipher_text += ' ';
+     }
+     //for upper char 
+    if (isupper(plain_text[i])){
+           
+           // to store the shifted char to cipher_text
+             cipher_text += char(int(plain_text[i]+shift_key-65)%26 +65);
+         }
+         // for lower char
+         if (islower(plain_text[i])) {
+         
+         // to store the shifted char to cipher_text 
+      cipher_text += char(int(plain_text[i]+shift_key-97)%26 +97);
+         }
+    }
+    // displaying the cipher_text 
+cout<<"\nThe cipher text       : "<<cipher_text<<endl;
+     return cipher_text; // return cipher_text 
+ }
+
+//this second func is to decrypt the cipher_text when receive by entering thesame shift_key 
+
+void func (int decrypt_key){
+string decrypt;
+// putting cipher text value to decrypt  
+decrypt = cipher_text; 
+int len =decrypt.length();//checking length of decrypt_text 
+
+           // check if decrypt key == shift_key 
+            if(decrypt_key == shift_key){
+  for (int i=0; i<len;i++){
+  //for space
+     if(decrypt[i]==' ')
+     {
+         decrypt_Msg += ' ';
+     }
+  
+if (isupper(decrypt[i]))// check for upper char
+{ 
+// store decrypted char to decrypt 
+decrypt_Msg += char(int((decrypt[i]-decrypt_key)-65)%26 +65);
+        }
+if(islower(decrypt[i])) // check for lower char
+{
+decrypt_Msg += char(int((decrypt[i]-decrypt_key)-97)%26 +97);
+        } }
+cout <<"\nThe decrypted text        : "<<decrypt_Msg<<endl; 
+}
+
+else {
+    cout<<"\nYou enter the wrong shift key\n";
+}}
+
+};// class ends here
+
+int main(){
+string plain_text;
+getline(cin,plain_text);//the sender msg;
+cout<<"Enter plain text      : "<<plain_text;
+int shift_key=3; // default key is 3 
+cin>>shift_key; // the sender shift shift_key
+cout<<"\nEnter your shift key  : "<<shift_key;
+
+
+SecretMsg z;
+z.func(plain_text, shift_key);
+cout<<"\nYour decryption goes here::\n";
+int back_key=0; 
+cin>>back_key ;   // the receiver shift shift_key
+cout<<"\nEnter the decryption key  : "<<back_key;
+
+z.func(back_key);
+
+return 0;
+}
