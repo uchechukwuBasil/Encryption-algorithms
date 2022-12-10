@@ -1,0 +1,85 @@
+/*
+Algorithm based on the english philospher Francis Bacon's 1605 cipher, uses binary representation to encode and decode messages containing sets of 5-digit binary letters. Includes A-Z and some punctuation.
+
+*/
+
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <ctype.h>
+using namespace std;
+
+string alphabet{"ABCDEFGHIJKLMNOPQRSTUVWXYZ.,?!"}; // 30 characters total of letters and punctuation
+
+string encode(string s){ 
+    string res{};
+    for(char c : s)
+    {
+        if(!isalpha(c))
+        {
+            switch(c)
+            {
+            case '.' :
+                res += "11010";
+                break;
+            case ',' :
+                res += "11011";
+                break;
+            case '?' :
+                res += "11100";
+                break;
+            case '!' :
+                res += "11101";
+                break;
+            case ' ' :
+                res += "11111";
+                break;
+            }
+            continue;
+        }
+        c = toupper(c);
+        if(c < 'A' || c > 'Z') continue;
+        int n = c - 'A'; 
+        string bits{"00000"}; // Initialize string to all 0.
+        string res_temp{};
+        for(int i = 0; n > 0; ++i) // binary conversion algorithm.
+        {
+            bits[i] = (n % 2)? '1' : '0';
+            n /= 2;
+        }
+        for(int i = 4; i >= 0; --i) // Reversing the bits and adding them to the result.
+        {
+            res_temp += bits[i];
+        }
+        res += res_temp;
+    }
+    return res;
+}
+
+string decode(string s){ // Decoding
+    int n{};
+    size_t letters{s.size() / 5};
+    string res{};
+    for(unsigned int j = 0; j < letters; ++j)
+    {
+        n = 0;
+        string s_temp = s.substr(5*j, 5);
+        for(int i = 4; i >= 0; --i)
+        {
+            n += (s_temp[i] == '1')? pow(2, (4 - i)) : 0;
+        }
+        res += (n > 30)? ' ' : alphabet[n];
+    }
+    return res;
+}
+
+int main()
+{
+    cout << "Enter string to Encoder & Decoder!" << endl;
+    
+    string new_code{}, res{};
+    getline(cin, new_code);
+    res = encode(new_code);
+    cout << "RESULT (ENCODED): " << res << endl
+         << "RESULT (DECODED): " << decode(res) << endl;
+}
