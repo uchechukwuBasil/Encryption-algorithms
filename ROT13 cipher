@@ -1,0 +1,55 @@
+/*
+ROT13 cipher is encrypt/decryptor.enter string to encrypt then you enter the output, you get back the original input
+
+/*Algorithm here :: replacing each letter before m by the one 13 letters after it by ASCII values. After m I replaced them with the (13-No. of letters between the letter and z +1) value */
+
+*/
+
+#include <iostream>
+#include <string>
+#include <cctype>  
+
+using namespace std;
+
+
+bool not_alpha_check(char c){
+   if(char(tolower(c))>='a'&&char(tolower(c)<='z'))
+   return false;  
+   else
+   return true;
+}
+
+
+
+string rot13 (string& n){
+    string s="";
+    int l=n.length();   
+    for(int i=0;i<l;i++)
+    { 
+        if (n[i]==' '||not_alpha_check(n[i])){ 
+            s+=n[i];
+            continue;
+        }
+        if(char(tolower(n[i]))>='n'&&char(tolower(n[i]))<='z')
+       {
+            char a='z',b='a';
+            int k=(int)a-(int)n[i];
+            n[i]=char((int)b+(13-k-1));
+       }
+       else
+           n[i]=char((int)n[i]+13);
+      s=s+n[i];
+    }
+     return s;
+    
+}
+
+
+
+int main() {
+    string n;
+    getline(cin,n); 
+    cout<<rot13(n);
+    
+    return 0;
+}
