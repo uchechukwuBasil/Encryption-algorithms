@@ -1,0 +1,59 @@
+/*Vigenere Cipher is a method of encrypting alphabetic text.
+ It uses a simple form of polyalphabetic substitution.
+ A polyalphabetic cipher is any cipher based on substitution, 
+using multiple substitution alphabets.
+
+*/
+
+
+#include <iostream>
+#include<string>
+#include <ctype.h>
+using namespace std;
+
+int main() {
+    string s, k;
+ /*   cout<<"Enter the string you want to encrypt:"<<endl;*/
+    cin>>s; 
+/*    cout<<"\nEnter the key:"<<endl;*/
+    cin>>k;
+    
+    int msg =s.length();int  key = k.length();    int i, j=0;
+    
+     for(i = 0; i < msg; i++) if(s[i]==tolower(char(int(s[i])-32))) s[i]=toupper(s[i]); 
+     for(i = 0; i < key; i++)  if(k[i]==tolower(char(int(k[i])-32))) k[i]=toupper(k[i]);
+
+    string FKey=s;
+ 
+    for(i = 0; i < msg; i++)
+    {
+        if(j == key)
+            j = 0;
+ 
+        FKey[i] = k[j];
+        j++;
+    }
+    
+    string EMsg=s,DMsg=s;
+    
+   //encryption
+    for(i = 0; i < msg; ++i)
+        EMsg[i] = ((s[i] + FKey[i]) % 26) + 'A';
+ 
+  //  encryptedMsg[i] = '\0';
+ 
+    //decryption
+    for(i = 0; i < msg; ++i)
+        DMsg[i] = (((EMsg[i] - FKey[i]) + 26) % 26) + 'A';
+ 
+  //  decryptedMsg[i] = '\0';
+ 
+    cout<<"Original Message: "<<s;
+    cout<<"\nKey: "<<k;
+    cout<<"\nNew Generated Key: "<<FKey;
+    cout<<"\nEncrypted Message: "<<EMsg;
+    cout<<"\nDecrypted Message: "<<DMsg;
+ 
+
+    return 0;
+}
