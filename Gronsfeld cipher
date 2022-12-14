@@ -1,0 +1,116 @@
+
+/*
+The Gronsfeld cipher is just like a Vigenère cipher, but uses numbers instead of letters as a key.
+
+First enter the text you want to encrypt then enter the numeric key.
+
+*/
+
+
+
+#include <iostream>
+#include <string>
+#include <cctype>
+using namespace std;
+
+string GenerateKey(string str, string keyword) 
+
+// generates key when the length =! to length of the plain text 
+{
+    int sizeOfText = str.size();
+    string key = "\0";
+    
+    if(str.size() == keyword.size())
+        key = keyword;
+    else
+    {
+        int index = 0, count = 0;
+        while(count < sizeOfText)
+        {
+            key += keyword[index];
+            if(index == (keyword.size() -1))
+                index = -1;
+            
+            index++;
+            count++;
+        }
+    }
+    return key;
+}
+
+
+//This function will generate the Encrypted text with the help of a key
+string CipheredText(string str, string key)
+{
+    string cipherStr = "\0";
+    
+     for(int i = 0; i < str.size(); i++)
+    {
+        if(islower(str[i]))
+            str[i] = toupper(str[i]);
+    }
+    
+    for(int i = 0; i < str.size(); i++)
+    {
+        int num = key[i] - '0';
+        int x = str[i] + num;
+    
+        if(x > 90)
+            x -= 26;
+            
+        cipherStr += (char)x;
+    }
+    
+    return cipherStr;
+}
+
+
+int main() 
+{
+    string str, keyword;
+    
+    cin >> str;
+    cout << "Entered text: " << str << endl;
+    
+    cin >> keyword;
+    cout << "Entered key: " << keyword << endl << endl;
+    
+    while(keyword.empty())
+    {
+        cout << "\nNo key entered, enter the for encryption: ";
+        cin >> keyword;
+        cout << "\nEntered key: " << keyword << endl << endl;
+    }
+    
+    if(keyword.size() > str.size())
+    {
+        cout << "Length of key cannot be greater than the length of text\n";
+        return 0;
+    }        
+    for(int i = 0; i < str.size(); i++)
+    {
+        if(isdigit(str[i]) || ispunct(str[i]))
+        {
+            cout << "Cannot encrypt text because the text contains special character or number \n";
+            return 0;
+        }
+    }
+    
+    for(int i = 0; i < keyword.size(); i++)
+    {
+        if(isalpha(keyword[i]) || ispunct(keyword[i]))
+        {
+            cout << "Cannot encrypt text because the key contains special character or an alphabet\n";
+            return 0;
+        }
+    }
+    
+    
+    string key = GenerateKey(str, keyword);
+    string cipherStr = CipheredText(str, key);
+    
+    cout << "Encrypted text: " << cipherStr << endl;
+    
+    return 0;
+}
+
